@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+        h1{
+            margin-top: 20px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Weather Update</h1>
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                
+                <input type="text" class="form-control" id="inputValue" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button type="button" id="search-btn" class="btn btn-warning">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <!-- <img src="https://openweathermap.org/img/wn/02d@2x.png" id="icon-image" alt=""> -->
+            <img src="" id="icon-image" alt="">
+            <h1 id='cityName'></h1>
+            <h3><span id='temp'></span></h3>
+            <h1 id="description"></h1>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('search-btn').addEventListener('click',function(){
+            const inputValue = document.getElementById('inputValue');
+            const cityName = document.getElementById('cityName');
+            const temp = document.getElementById('temp');
+            const desc = document.getElementById('description');
+            
+
+            fetch('https://api.openweathermap.org/data/2.5/weather?q='+inputValue.value+'&appid=92a02ab22a260f51ec629d2c5f18c02f')
+            .then(res => res.json())
+            .then(data => {
+                const nameValue = `${data.name}, ${data.sys['country']}`;
+                const tempValue = data.main['temp'];
+
+                // another way
+                // ***** const descr = data['weather'][0]['main']; *****
+
+                const descr = data.weather[0];
+                const descValue = descr.main;
+                document.getElementById('icon-image').src = `https://openweathermap.org/img/wn/${data['weather'][0]['icon']}@2x.png`
+                
+                cityName.innerText = nameValue;
+                temp.innerText = `${(tempValue - 273).toFixed(2)}° C`;
+                desc.innerText = descValue;
+
+            })
+        })
+    </script>
+
+</body>
+
+</html>
